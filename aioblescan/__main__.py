@@ -30,6 +30,7 @@ from aioblescan.plugins import EddyStone
 from aioblescan.plugins import RuuviWeather
 from aioblescan.plugins import ATCMiThermometer
 from aioblescan.plugins import ThermoBeacon
+from aioblescan.plugins import Tilt
 
 # global
 opts = None
@@ -86,6 +87,10 @@ def my_process(data):
         if xx:
             print("Temperature info {}".format(xx))
             return
+    if opts.tilt:
+        xx=Tilt().decode(ev)
+        if xx:
+            print("{}".format(xx))  
     if noopt:
         ev.show(0)
 
@@ -123,19 +128,18 @@ def main(args=None):
         help="Look only for ATC_MiThermometer tag messages",
     )
     parser.add_argument(
-        "-T",
-        "--thermobeacon",
-        action="store_true",
-        default=False,
-        help="Look only for ThermoBeacon messages",
-    )
-    parser.add_argument(
         "-R",
         "--raw",
         action="store_true",
         default=False,
         help="Also show the raw data.",
     )
+    parser.add_argument(
+        "-T",
+        "--tilt", 
+        action='store_true',
+        default=False,    
+        help="Look only for Tilt.")
     parser.add_argument(
         "-a",
         "--advertise",
